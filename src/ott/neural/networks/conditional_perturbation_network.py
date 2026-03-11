@@ -1,4 +1,13 @@
-from typing import Any, Callable, Dict, Iterable, Optional, Sequence, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    Optional,
+    Sequence,
+    Tuple,
+    Union,
+)
 
 import flax.linen as nn
 import jax.numpy as jnp
@@ -30,10 +39,9 @@ class ConditionalPerturbationNetwork(BasePotential):
 
     @nn.compact
     def __call__(
-        self, x: jnp.ndarray, c: Optional[jnp.ndarray]=None
+        self, x: jnp.ndarray, c: Optional[jnp.ndarray] = None
     ) -> Union[jnp.ndarray, Dict[str, jnp.ndarray]]:  # noqa: D102
-        """
-        Args:
+        """Args:
             x (jnp.ndarray): The input data of shape bs x dim_data
             c (jnp.ndarray): The context of shape bs x dim_cond with
                 possibly different modalities
@@ -47,7 +55,7 @@ class ConditionalPerturbationNetwork(BasePotential):
             c = x["c"]
             x = x["X"]
             return_batch = True
-        
+
         n_input = x.shape[-1]
 
         # Chunk the inputs

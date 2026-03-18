@@ -1,6 +1,6 @@
 # Conditional Monge Gap: JIT-compatible loss + training estimator
 
-The CMonge paper has been accepted to Nature Machine Intelligence. Picks up from #605 and fixes the JIT issue + adds a training estimator.
+The CMonge paper has been accepted to Nature Machine Intelligence. This PR picks up from #605 and fixes the JIT issue + adds a training estimator.
 
 ## Changes
 
@@ -13,11 +13,11 @@ loss = fitting(T(x,c), y) + lambda * regularizer(x, T(x,c), labels)
        |__ sinkdiv            |__ cmonge_gap_from_samples
 ```
 
-**Numerical exactness caveat:** When all conditions have the same `n_k`, the segment-based result matches `monge_gap_from_samples` to ~1e-7. With unequal `n_k`, smaller conditions are zero-padded to `max_measure_size`, which changes the Sinkhorn geometry slightly. This is inherent to the segment/vmap approach -- the trade-off is JIT compatibility.
+A potential precision tradeoff remains: When all conditions have the same `n_k`, the segment-based result matches `monge_gap_from_samples` to ~1e-7. With unequal `n_k`, smaller conditions are zero-padded to `max_measure_size`, which changes the Sinkhorn geometry slightly. This is inherent to the segment/vmap approach -- the trade-off is JIT compatibility.
 
 ## Tests (26 passing)
 
-All tests mirror `monge_gap_test.py` patterns whereever applicable: non-negativity (random + neural map targets), JIT consistency, cost function variants, estimator convergence. Three additional equivalence tests verify `cmonge_gap = mean(monge_gap_k)` for equal-size conditions, document the padding effect for unequal sizes, and check monotonic gap ordering by difficulty.
+All tests mirror `monge_gap_test.py` patterns wherever applicable: non-negativity (random + neural map targets), JIT consistency, cost function variants, estimator convergence. Three additional equivalence tests verify `cmonge_gap = mean(monge_gap_k)` for equal-size conditions, document the padding effect for unequal sizes, and check monotonic gap ordering by difficulty.
 
 ```bash
 pytest tests/neural/methods/conditional_monge_gap_test.py -v  # 26 tests, ~80s

@@ -168,3 +168,8 @@ docs/html
 
 # macos
 **/.DS_Store
+
+# local notes
+PR_MESSAGE.md
+PLAN.md
+uv.lock
